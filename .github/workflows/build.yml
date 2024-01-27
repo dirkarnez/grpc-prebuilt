@@ -94,6 +94,13 @@ jobs:
       #       -DBUILD_SHARED_LIBS=OFF ^
       #       -DCMAKE_INSTALL_PREFIX="cmake-build/${{ env.cmakeInstallationPath }}" -B./cmake-build &&^
       #       cd cmake-build && cmake --build . --config Release && cmake --install . 
+
+      - name: curl nasm
+        shell: cmd
+        run: |
+          curl https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/win64/nasm-2.16.01-win64.zip -L -O &&^
+          7z.exe x nasm-2.16.01-win64.zip
+        
             
       - name: set PATH, check mingw version, cmake generate, build and install
         if: ${{ matrix.compiler.url }}
@@ -109,6 +116,7 @@ jobs:
             cmake.exe -G"MinGW Makefiles" ^
             -DCMAKE_BUILD_TYPE=Release ^
             -DBUILD_SHARED_LIBS=OFF ^
+            -DCMAKE_ASM_NASM_COMPILER="%CD_LINUX%/nasm-2.16.01/nasm.exe" ^
             -DCMAKE_INSTALL_PREFIX="cmake-build/${{ env.cmakeInstallationPath }}" -B./cmake-build &&^
             cd cmake-build && ( cmake --build . --config Release && cmake --install .  || type .\CMakeFiles\CMakeError.log )  
  
